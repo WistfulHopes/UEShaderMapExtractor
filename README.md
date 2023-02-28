@@ -15,17 +15,26 @@ Extracts and helps identify shaders from Unreal material shadermaps. Note that t
 ## Vertex Factory hashes
 
 FLocalVertexfactory: 11475683181038621400
+
 FGPUSkinPassthroughVertexFactory: 7884826846012382956
+
 FParticleSpriteVertexFactory: 1936260693301728965
+
 FMeshParticleVertexFactory: 3257961110001812583
+
 FNiagaraSpriteVertexFactory: 13168243933419104092
+
 FNiagaraMeshVertexFactory: 3257961110001812583
+
 FNiagaraRibbonVertexFactory: 549208615835106585
+
 
 ## Vertex Shader hashes
 
 TBasePassVSFNoLightMapPolicy: 16833942227387653686
 
+
 ## Pixel Shader hashes
 
 TBasePassPSFNoLightMapPolicy: 4974208445782451494
+
