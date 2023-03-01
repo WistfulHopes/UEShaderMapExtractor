@@ -28,15 +28,52 @@ int main(int argc, char const *argv[])
                 break;
             }
         }
+        bool is_pssl = false;
         if (final_index == -1)
-            return final_index;
+        {
+            uint8_t magic[] = {0x53, 0x68, 0x64, 0x72};
+            for (int i = 0; i < atoi(argv[2]); i++)
+            {
+                if (std::memcmp(magic, (void*)(outBuffer + i), sizeof magic) == 0)
+                {
+                    final_index = i;
+                    is_pssl = true;
+                    break;
+                }
+            }
+            if (final_index == -1)
+                return final_index;
+        }
         uint32_t size = *(uint32_t*)&outBuffer[final_index + 24];
         std::string newName = argv[1];
-        newName += ".dxbc";
+        uint8_t dxil_magic[] = {0x44, 0x58, 0x49, 0x4C};
+        bool is_dxil = false;
+        for (int i = 0; i < atoi(argv[2]); i++)
+        {
+            if (std::memcmp(dxil_magic, (void*)(outBuffer + i), sizeof magic) == 0)
+            {
+                is_dxil = true;
+                break;
+            }
+        }
+        if (is_dxil)
+            newName += ".dxil";
+        else if (is_pssl)
+            newName += ".pssl";
+        else
+            newName += ".dxbc";
         std::ofstream outShader(newName, std::ios::binary | std::ios::out);
-        outShader.write(outBuffer + final_index, size);
+        if (is_pssl)
+        {
+            outShader.write(outBuffer, atoi(argv[2]));
+            std::cout << "File written to " << newName << " with size " << argv[2] << std::endl;
+        }
+        else
+        {
+            outShader.write(outBuffer + final_index, size);
+            std::cout << "File written to " << newName << " with size " << size << std::endl;
+        }
         outShader.close();
-        std::cout << "File written to " << newName << " with size " << size << std::endl;
         return 0;
     }
     return success;
