@@ -1,7 +1,7 @@
 # UEShaderMapExtractor
 Extracts and helps identify shaders from Unreal material shadermaps. Note that this tool only works on D3D11/D3D12 games that use LZ4 compression at the moment. Support for other shader and compression types is currently unimplemented.
 
-## Usage:
+## Usage
 
 Depending on whether or not your game uses shader archives, the first steps will be different.
 
