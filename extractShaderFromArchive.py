@@ -16,10 +16,11 @@ map_entry = shaders['ShaderMapEntries'][index]
 offset = map_entry['ShaderIndicesOffset']
 num = map_entry['NumShaders']
 
-shader_index = 0
+index = 0
 
 for n in range(offset, offset + num):
-    shader_entry = shaders['ShaderEntries'][n]
+    shader_index = shaders['ShaderIndices'][n]
+    shader_entry = shaders['ShaderEntries'][shader_index]
     offset = shader_entry['Offset']
     size = shader_entry['Size']
     uncompressed_size = shader_entry['UncompressedSize']
@@ -37,11 +38,11 @@ for n in range(offset, offset + num):
     f2.seek(offset, 1)
     data = bytearray()
     data += f2.read(size)
-    o = open(sys.argv[4] + str(shader_index), "wb")
+    o = open(sys.argv[4] + str(index), "wb")
     o.write(data)
     o.close()
-    subprocess.call(['decompress_shader.exe', sys.argv[4] + str(shader_index), str(uncompressed_size)])
-    os.remove(sys.argv[4] + str(shader_index))
-    shader_index += 1
+    subprocess.call(['decompress_shader.exe', sys.argv[4] + str(index), str(uncompressed_size)])
+    os.remove(sys.argv[4] + str(index))
+    index += 1
 
 f.close()
