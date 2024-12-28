@@ -1,5 +1,5 @@
 # UEShaderMapExtractor
-Extracts and helps identify shaders from Unreal material shadermaps. Supports UE4.25 through 5.2 materials. Does not support UE5+ games using IO Store and shader archives.
+Extracts and helps identify shaders from Unreal material shadermaps. Supports UE4.25 through 5.2 materials.
 
 ## Usage
 
