@@ -28,9 +28,9 @@ Depending on whether or not your game uses shader archives, the first steps will
 
 ### Identify material buffer layout
 
-Currently only works without shader archives, and pre-UE5.
+Currently only works on UE4.
 
-1. With Python 3, run this command: `python parseAndDecompressShaders.py (exported JSON file)`. This will output a new JSON in the directory, with "_preshader.json" at the end.
+1. With Python 3, run this command: `python extractPreshader.py (exported JSON file)`. This will output a new JSON in the directory, with "_preshader.json" at the end.
 2. The last cbuffer in your decompiled shader should be the "Material" cbuffer, which this preshader JSON maps to.
     - Vectors come first in the cbuffer, and take up one whole index. This means that cbuffer\[0] is equivalent to the first vector entry of the preshader JSON.
     - Scalars come last in the cbuffer, and take up one *component* of an index. This means that if you have 40 vectors in your cbuffer, then cbuffer\[40].x is equal to the first scalar entry of the preshader JSON, cbuffer\[40].y to the second, etc.
