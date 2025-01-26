@@ -28,7 +28,7 @@ Depending on whether or not your game uses shader archives, the first steps will
 
 ### Identify material buffer layout
 
-Currently only works on UE4.
+Note: replace `extractPreshader.py` with the one that fits your UE4/5 version.
 
 1. With Python 3, run this command: `python extractPreshader.py (exported JSON file)`. This will output a new JSON in the directory, with "_preshader.json" at the end.
 2. The last cbuffer in your decompiled shader should be the "Material" cbuffer, which this preshader JSON maps to.
