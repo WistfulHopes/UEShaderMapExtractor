@@ -20,16 +20,12 @@ for resource in resources:
     compilation_output = content['MaterialCompilationOutput']
     uniform_expression_set = compilation_output['UniformExpressionSet']
     
+    preshader_data = uniform_expression_set['UniformPreshaderData']['Data']
+    
     name = sys.argv[1] + "_" + quality_level + "_" + feature_level
-        
-    code = shader_map['Code']
-    for i in code['ShaderEntries']:
-        coded_string = i['Code']
-        o = open(name  + "_" + str(index), "wb")
-        o.write(base64.b64decode(coded_string))
-        o.close()
-        subprocess.call(['decompress_shader.exe', name + "_" + str(index), str(i['UncompressedSize'])])
-        os.remove(name  + "_" + str(index))
-        index += 1
+    
+    o = open(name + "_preshader.bin", "wb")
+    o.write(base64.b64decode(preshader_data))
+    o.close()
   
 f.close()
