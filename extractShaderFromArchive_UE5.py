@@ -24,8 +24,8 @@ for n in range(offset, offset + num):
     group_index = shader_entry['ShaderGroupIndex']
     group_offset = shader_entry['UncompressedOffsetInGroup']
     group_entry = shaders['ShaderGroupEntries'][group_offset]
-    size = shader_entry['CompressedSize']
-    uncompressed_size = shader_entry['UncompressedSize']
+    size = group_entry['CompressedSize']
+    uncompressed_size = group_entry['UncompressedSize']
     f2.seek(4, 0)
     map_array_size = struct.unpack('i', f2.read(4))[0]
     f2.seek(20 * map_array_size, 1)
