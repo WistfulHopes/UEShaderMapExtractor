@@ -263,12 +263,12 @@ for resource in resources:
     def read_preshader(data):
         global count
         ret = []
-        count = 0
         
         while len(data) > 0:
+            count = 0
             ret.append(read_preshader_sub(data))
             data = data[count:]
-                
+
         return ret
         
     shader_map = resource['LoadedShaderMap']
