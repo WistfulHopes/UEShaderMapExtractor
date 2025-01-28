@@ -8,7 +8,11 @@
 
 int write_file(char* outBuffer, size_t finalSize, const char* outName)
 {
-    uint8_t magic[] = {0x44, 0x58, 0x42, 0x43};
+	std::string binName = std::string(outName) + ".bin";
+    std::ofstream outBin(binName, std::ios::binary | std::ios::out);
+    outBin.write(outBuffer, finalSize);
+    
+	uint8_t magic[] = {0x44, 0x58, 0x42, 0x43};
     int final_index = -1;
     for (int i = 0; i < finalSize; i++)
     {
@@ -175,8 +179,7 @@ bool appUncompressMemoryGZIP(void* UncompressedBuffer, int32_t UncompressedSize,
 bool appDecompressOodle(const char *CompressedBuffer, int CompressedSize, char *UncompressedBuffer, int UncompressedSize)
 {
 	size_t ret = OodleLZ_Decompress(CompressedBuffer, CompressedSize, UncompressedBuffer, UncompressedSize,
-		OodleLZ_FuzzSafe_Yes, OodleLZ_CheckCRC_No, OodleLZ_Verbosity_Lots);
-	// verbosity is set to OodleLZ_Verbosity_Minimal, so any errors will be displayed in debug output (via OutputDebugString)
+		OodleLZ_FuzzSafe_Yes, OodleLZ_CheckCRC_No, OodleLZ_Verbosity_Minimal);
 	if (ret != UncompressedSize)
 	{
 		std::cout << "OodleLZ_Decompress returned " << ret << std::endl;
@@ -211,13 +214,17 @@ int main(int argc, char const *argv[])
     std::ifstream shader(argv[1], std::ios::binary);
     sstream << shader.rdbuf();
     shader.seekg(0, std::ios::end);
-    size_t compressedSize = static_cast<size_t>(shader.tellg()) - 4;
+    size_t compressedSize = shader.tellg();
     shader.close();
     const std::string str(sstream.str());
     const char* buffer = str.c_str();
     size_t uncompressedSize = atoi(argv[2]);
     auto outBuffer = (char*)malloc(uncompressedSize);
-    std::cout << "Decompressing file " << argv[1] << " with size " << compressedSize << std::endl;
+	std::cout << "Decompressing file " << argv[1] << " with size " << compressedSize << std::endl;
+	if (appDecompressOodle(buffer, compressedSize, outBuffer, uncompressedSize)) 
+	{
+		return write_file(outBuffer, uncompressedSize, argv[1]);
+	}
     if (LZ4_decompress_safe(buffer, outBuffer, compressedSize, uncompressedSize))
     {
         return write_file(outBuffer, uncompressedSize, argv[1]);
@@ -227,10 +234,6 @@ int main(int argc, char const *argv[])
         return write_file(outBuffer, uncompressedSize, argv[1]);
     }
 	if (appUncompressMemoryGZIP(outBuffer, uncompressedSize, buffer, compressedSize)) 
-	{
-		return write_file(outBuffer, uncompressedSize, argv[1]);
-	}
-	if (appDecompressOodle(buffer, compressedSize, outBuffer, uncompressedSize)) 
 	{
 		return write_file(outBuffer, uncompressedSize, argv[1]);
 	}
