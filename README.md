@@ -3,16 +3,23 @@ Extracts and helps identify shaders from Unreal material shadermaps. Supports ma
 
 ## Usage
 
+### Setup
+
+1. Download [FModel](https://github.com/4sval/FModel).
+2. Enable "Serialize Inline Shader Maps" in Settings.
+![image](https://github.com/user-attachments/assets/c4f13c4c-8323-44da-9574-f3e78d2a5563)
+
+
 Depending on whether or not your game uses shader archives, the first steps will be different.
 
 ### No shader archives
 
-1. Export a JSON of your material from [FModel](https://github.com/4sval/FModel).
+1. Export a JSON of your material from FModel.
 2. With Python 3, run this command: `python parseAndDecompressShaders.py (exported JSON file)`. Make sure `decompress_shader.exe` is in the same directory. This will extract and decompress the DXBC/DXIL shaders from the exported JSON.
 
 ### With shader archives
 
-1. Export the JSON and binary form of the shader archive from [FModel](https://github.com/4sval/FModel).
+1. Export the JSON and binary form of the shader archive from FModel.
 2. In your material, search for "ResourceHash". Store the hash for the next step.
 3. With Python 3, run this command: `python extractShaderFromArchive.py (exported JSON file) (exported archive binary) (hash) (output name)`. Make sure `decompress_shader.exe` is in the same directory. This will extract and decompress the DXBC/DXIL shaders from the exported JSON and archive, using the hash to identify the shadermap.
     - If the game is using UE5 and IO Store, use `python extractShaderFromArchive_UE5.py (exported JSON file) (exported archive binary) (hash) (output name)`.
