@@ -24,9 +24,7 @@ for resource in resources:
 
 
     def extract_append(data):
-        list = []
-        list.append([struct.unpack('<B', data[1:2])])
-        return (list)
+        return struct.unpack('<B', data[1:2])
 
 
     def read_preshader_sub(data):
