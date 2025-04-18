@@ -216,6 +216,17 @@ for resource in resources:
             data = data[count:]
                 
         return ret
+
+    def component_to_str(comp):
+        match comp:
+            case 0:
+                return "x"
+            case 1:
+                return "y"
+            case 2:
+                return "z"
+            case 3:
+                return "w"
         
     shader_map = resource['LoadedShaderMap']
     quality_level = shader_map['ShaderMapId']['QualityLevel']
@@ -240,15 +251,23 @@ for resource in resources:
         "scalars": []
     }
     
+    cbuffer_idx = 0
+    cbuffer_component = 0
+    
     for vector in vector_preshaders:
         offset = vector['OpcodeOffset']
         size = vector['OpcodeSize']
-        parsed_preshader["vectors"].append(read_preshader(preshader[offset:offset+size]))
+        parsed_preshader["vectors"].append({"data":read_preshader(preshader[offset:offset+size]), "idx":"buffer[" + str(cbuffer_idx) + "]"})
+        cbuffer_idx += 1
     
     for scalar in scalar_preshaders:
         offset = scalar['OpcodeOffset']
         size = scalar['OpcodeSize']
-        parsed_preshader["scalars"].append(read_preshader(preshader[offset:offset+size]))
+        parsed_preshader["scalars"].append({"data":read_preshader(preshader[offset:offset+size]), "idx":"buffer[" + str(cbuffer_idx) + "]" + "." + component_to_str(cbuffer_component)})
+        cbuffer_component += 1
+        if cbuffer_component == 4:
+            cbuffer_component = 0
+            cbuffer_idx += 1
     
     o = open(name + "_preshader.json", "w")
     o.write(json.dumps(parsed_preshader, indent=4))
