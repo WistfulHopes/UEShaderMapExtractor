@@ -24,9 +24,7 @@ for resource in resources:
 
 
     def extract_append(data):
-        list = []
-        list.append([struct.unpack('<B', data[1:2])])
-        return (list)
+        return struct.unpack('<B', data[1:2])
 
 
     def read_preshader_sub(data):
@@ -239,16 +237,24 @@ for resource in resources:
         "vectors": [],
         "scalars": []
     }
+  
+    cbuffer_idx = 0
+    cbuffer_component = 0
     
     for vector in vector_preshaders:
         offset = vector['OpcodeOffset']
         size = vector['OpcodeSize']
-        parsed_preshader["vectors"].append(read_preshader(preshader[offset:offset+size]))
+        parsed_preshader["vectors"].append({"data":read_preshader(preshader[offset:offset+size]), "idx":"buffer[" + str(cbuffer_idx) + "]"})
+        cbuffer_idx += 1
     
     for scalar in scalar_preshaders:
         offset = scalar['OpcodeOffset']
         size = scalar['OpcodeSize']
-        parsed_preshader["scalars"].append(read_preshader(preshader[offset:offset+size]))
+        parsed_preshader["scalars"].append({"data":read_preshader(preshader[offset:offset+size]), "idx":"buffer[" + str(cbuffer_idx) + "]" + "." + component_to_str(cbuffer_component)})
+        cbuffer_component += 1
+        if cbuffer_component == 4:
+            cbuffer_component = 0
+            cbuffer_idx += 1
     
     o = open(name + "_preshader.json", "w")
     o.write(json.dumps(parsed_preshader, indent=4))
