@@ -215,6 +215,17 @@ for resource in resources:
                 
         return ret
         
+    def component_to_str(comp):
+        match comp:
+            case 0:
+                return "x"
+            case 1:
+                return "y"
+            case 2:
+                return "z"
+            case 3:
+                return "w"
+
     shader_map = resource['LoadedShaderMap']
     quality_level = shader_map['ShaderMapId']['QualityLevel']
     feature_level = shader_map['ShaderMapId']['FeatureLevel']
