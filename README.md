@@ -19,7 +19,7 @@ Depending on whether or not your game uses shader archives, the first steps will
 
 ### With shader archives
 
-1. Export the JSON and binary form of the shader archive from FModel.
+1. Export the shader archive as both JSON and binary from FModel.
 2. In your material, search for "ResourceHash". Store the hash for the next step.
 3. With Python 3, run this command: `python extractShaderFromArchive.py (exported JSON file) (exported archive binary) (hash) (output name)`. Make sure `decompress_shader.exe` is in the same directory. This will extract and decompress the DXBC/DXIL shaders from the exported JSON and archive, using the hash to identify the shadermap.
 
