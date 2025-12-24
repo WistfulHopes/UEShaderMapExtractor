@@ -19,6 +19,7 @@ Depending on whether or not your game uses shader archives, the first steps will
 
 ### With shader archives
 
+0. If your game is Unreal Engine 5 and uses IO Store, you'll need to use [retoc](https://github.com/trumank/retoc) to convert the containers to .pak files. Then, continue the following steps using paks *only*, not the ucas/utoc files.
 1. Export the shader archive as both JSON and binary from FModel.
 2. In your material, search for "ResourceHash". Store the hash for the next step.
 3. With Python 3, run this command: `python extractShaderFromArchive.py (exported JSON file) (exported archive binary) (hash) (output name)`. Make sure `decompress_shader.exe` is in the same directory. This will extract and decompress the DXBC/DXIL shaders from the exported JSON and archive, using the hash to identify the shadermap.
